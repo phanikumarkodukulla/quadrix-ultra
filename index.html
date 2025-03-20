@@ -1,708 +1,1591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoBG Remover - Remove Background from Images Instantly</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <style>
-        :root {
-            --primary-color: #6c63ff;
-            --secondary-color: #4a42eb;
-            --accent-color: #ff6b6b;
-            --dark-color: #2c2c2c;
-            --light-color: #f8f9fa;
-            --success-color: #28a745;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--dark-color);
-            background-color: #f5f7ff;
-            overflow-x: hidden;
-        }
-        
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-        }
-        
-        .navbar {
-            background-color: white;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.6rem;
-        }
-        
-        .nav-link {
-            font-weight: 500;
-            color: var(--dark-color);
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            color: var(--primary-color);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            border-radius: 30px;
-            padding: 10px 25px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
-        }
-        
-        .hero-section {
-            padding: 100px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-text h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--dark-color);
-        }
-        
-        .hero-text p {
-            font-size: 1.1rem;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        .hero-image {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .features-section {
-            padding: 80px 0;
-            background-color: white;
-        }
-        
-        .feature-card {
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            background-color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-        }
-        
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-        
-        .footer {
-            padding: 30px 0;
-            background-color: var(--dark-color);
-            color: white;
-        }
-        
-        .footer a {
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .footer a:hover {
-            color: var(--primary-color);
-        }
-        
-        .social-icons a {
-            font-size: 1.2rem;
-            margin-right: 15px;
-        }
-        
-        /* Image Upload Area */
-        .upload-area {
-            padding: 50px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            margin-bottom: 40px;
-        }
-        
-        .drop-zone {
-            border: 2px dashed var(--primary-color);
-            border-radius: 15px;
-            padding: 60px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .drop-zone:hover {
-            background-color: rgba(108, 99, 255, 0.05);
-        }
-        
-        .drop-zone.active {
-            background-color: rgba(108, 99, 255, 0.1);
-            border-color: var(--secondary-color);
-        }
-        
-        .drop-zone i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-        
-        .drop-zone h3 {
-            margin-bottom: 10px;
-            color: var(--dark-color);
-        }
-        
-        .drop-zone p {
-            color: #777;
-            margin-bottom: 20px;
-        }
-        
-        #fileInput {
-            display: none;
-        }
-        
-        .preview-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            flex-wrap: wrap;
-        }
-        
-        .preview-box {
-            width: 48%;
-            background-color: #f5f7ff;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-        }
-        
-        .preview-box h4 {
-            padding: 15px;
-            margin: 0;
-            background-color: white;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .preview-img-container {
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            background-color: #f8f9fa;
-            background-image: linear-gradient(45deg, #ddd 25%, transparent 25%), 
-                              linear-gradient(-45deg, #ddd 25%, transparent 25%), 
-                              linear-gradient(45deg, transparent 75%, #ddd 75%), 
-                              linear-gradient(-45deg, transparent 75%, #ddd 75%);
-            background-size: 20px 20px;
-            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-        }
-        
-        .preview-img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        
-        .processing-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-        
-        .spinner {
-            border: 5px solid rgba(0, 0, 0, 0.1);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border-left-color: var(--primary-color);
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .btn-download {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            z-index: 2;
-        }
-        
-        /* Responsive Adjustments */
-        @media (max-width: 992px) {
-            .hero-section {
-                padding: 60px 0;
-            }
-            
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .preview-box {
-                width: 100%;
-            }
-            
-            .hero-text h1 {
-                font-size: 2rem;
-            }
-            
-            .upload-area {
-                padding: 30px;
-            }
-            
-            .drop-zone {
-                padding: 40px 15px;
-            }
-            
-            .preview-img-container {
-                height: 300px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quadrix Ultra - Gaming Edition</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Press+Start+2P&family=Exo+2:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+ :root {
+  --primary-color: #00f2fe;
+  --secondary-color: #ff4d94;
+  --tertiary-color: #9945FF;
+  --dark-color: #121212;
+  --light-color: #f0f0f0;
+  --accent-color: #00ff9d;
+  --neon-green: #39ff14;
+  --neon-blue: #00f2fe;
+  --neon-magenta: #ff00ff;
+  --neon-orange: #ff9e00;
+  --grid-color: rgba(0, 242, 254, 0.3);
+}
+
+body {
+  font-family: 'Exo 2', sans-serif;
+  background-color: var(--dark-color);
+  background-image: 
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239945FF' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.1) 0%, transparent 70%),
+    radial-gradient(circle at 85% 30%, rgba(153, 69, 255, 0.1) 0%, transparent 50%);
+  color: var(--light-color);
+  transition: all 0.5s ease;
+  padding-bottom: 60px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Cyber Grid Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -2;
+  opacity: 0.2;
+  animation: grid-scroll 20s linear infinite;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+@keyframes grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+/* Floating Particles */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px var(--primary-color);
+  animation: float-up 15s linear infinite;
+  opacity: 0;
+}
+
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+}
+
+.game-container {
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(5px);
+  padding: 30px 15px;
+  border-radius: 15px;
+  animation: container-pulse 8s ease-in-out infinite;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@keyframes container-pulse {
+  0% { box-shadow: 0 0 30px rgba(0, 242, 254, 0.1); }
+  50% { box-shadow: 0 0 50px rgba(0, 242, 254, 0.2), 0 0 80px rgba(153, 69, 255, 0.1); }
+  100% { box-shadow: 0 0 30px rgba(0, 242, 254, 0.1); }
+}
+
+.game-title {
+  font-family: 'Audiowide', cursive;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.7),
+               0 0 20px rgba(0, 242, 254, 0.4),
+               0 0 30px rgba(0, 242, 254, 0.2);
+  letter-spacing: 3px;
+  animation: cyberpunk-glitch 5s infinite;
+  font-size: 3.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-title::before, .game-title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.game-title::before {
+  left: 2px;
+  text-shadow: -1px 0 var(--neon-magenta);
+  animation: glitch-anim-1 2s infinite linear alternate-reverse;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  opacity: 0.8;
+}
+
+.game-title::after {
+  left: -2px;
+  text-shadow: -1px 0 var(--neon-green);
+  animation: glitch-anim-2 2s infinite linear alternate-reverse;
+  clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+  opacity: 0.8;
+}
+
+@keyframes glitch-anim-1 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(-3px, -3px); }
+  60% { transform: translate(3px, 3px); }
+  80% { transform: translate(3px, -3px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { transform: translate(0); }
+  20% { transform: translate(5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, 5px); }
+  80% { transform: translate(-5px, -5px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes cyberpunk-glitch {
+  0% { text-shadow: 0 0 10px rgba(0, 242, 254, 0.7),
+                    0 0 20px rgba(0, 242, 254, 0.4),
+                    0 0 30px rgba(0, 242, 254, 0.2); }
+  2% { text-shadow: 0 0 10px rgba(255, 77, 148, 0.7),
+                  0 0 20px rgba(255, 77, 148, 0.4),
+                  0 0 30px rgba(255, 77, 148, 0.2); }
+  3% { text-shadow: 0 0 10px rgba(0, 242, 254, 0.7),
+                  0 0 20px rgba(0, 242, 254, 0.4),
+                  0 0 30px rgba(0, 242, 254, 0.2); }
+  10% { text-shadow: 0 0 15px rgba(0, 242, 254, 0.9),
+                    0 0 25px rgba(0, 242, 254, 0.6),
+                    0 0 35px rgba(0, 242, 254, 0.4); }
+  25% { text-shadow: 0 0 15px rgba(153, 69, 255, 0.9),
+                    0 0 25px rgba(153, 69, 255, 0.6),
+                    0 0 35px rgba(153, 69, 255, 0.4); }
+  30% { text-shadow: 0 0 15px rgba(0, 242, 254, 0.9),
+                    0 0 25px rgba(0, 242, 254, 0.6),
+                    0 0 35px rgba(0, 242, 254, 0.4); }
+  50% { filter: blur(0.5px); }
+  51% { filter: blur(0); }
+  60% { text-shadow: 0 0 15px rgba(0, 255, 157, 0.9),
+                    0 0 25px rgba(0, 255, 157, 0.6),
+                    0 0 35px rgba(0, 255, 157, 0.4); }
+  75% { text-shadow: 0 0 15px rgba(0, 242, 254, 0.9),
+                    0 0 25px rgba(0, 242, 254, 0.6),
+                    0 0 35px rgba(0, 242, 254, 0.4); }
+  100% { text-shadow: 0 0 10px rgba(0, 242, 254, 0.7),
+                    0 0 20px rgba(0, 242, 254, 0.4),
+                    0 0 30px rgba(0, 242, 254, 0.2); }
+}
+
+.game-subtitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.9rem;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+  letter-spacing: 1px;
+  color: var(--secondary-color);
+  margin-top: -5px;
+  animation: subtitle-flicker 4s infinite;
+  position: relative;
+}
+
+.game-subtitle::after {
+  content: '>';
+  position: absolute;
+  margin-left: 5px;
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes subtitle-flicker {
+  0% { opacity: 1; }
+  90% { opacity: 1; }
+  92% { opacity: 0.3; }
+  94% { opacity: 1; }
+  96% { opacity: 0.3; }
+  98% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+#board {
+  max-width: 400px;
+  margin: 0 auto;
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.3),
+              0 0 60px rgba(153, 69, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(30, 30, 40, 0.9));
+  border: 2px solid rgba(0, 242, 254, 0.4);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+#board::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    var(--primary-color), 
+    var(--tertiary-color), 
+    var(--secondary-color), 
+    var(--accent-color));
+  z-index: -1;
+  border-radius: 12px;
+  animation: border-rotate 8s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes border-rotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+#board:hover {
+  transform: translateY(-5px) scale(1.02) rotateX(5deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+              0 0 30px rgba(0, 242, 254, 0.5),
+              0 0 60px rgba(153, 69, 255, 0.3);
+}
+
+/* 3D Hover effect for the board */
+#board:hover td {
+  transform: translateZ(5px);
+}
+
+td {
+  width: 100px;
+  height: 100px;
+  border: 2px solid navy;
+  text-align: center;
+  font-size: 42px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+}
+
+td::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+td::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shine 6s infinite;
+  opacity: 0;
+}
+
+@keyframes shine {
+  0% { opacity: 0; transform: translateX(-100%) rotate(30deg); }
+  15% { opacity: 0; transform: translateX(-100%) rotate(30deg); }
+  20% { opacity: 0.5; }
+  30% { opacity: 0; transform: translateX(100%) rotate(30deg); }
+  100% { opacity: 0; transform: translateX(100%) rotate(30deg); }
+}
+
+td:hover::before {
+  opacity: 1;
+}
+
+td:hover {
+  transform: scale(0.96) translateZ(10px);
+  box-shadow: inset 0 0 20px rgba(0, 242, 254, 0.5);
+  z-index: 2;
+}
+
+/* Enhanced cell styling */
+td.empty:hover {
+  background: rgba(0, 242, 254, 0.1);
+}
+
+td.Y {
+  color: var(--primary-color);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.7),
+               0 0 15px rgba(0, 242, 254, 0.5);
+  font-family: 'Exo 2', sans-serif;
+  animation: marker-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+td.O {
+  color: var(--secondary-color);
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 77, 148, 0.7),
+               0 0 15px rgba(255, 77, 148, 0.5);
+  font-family: 'Exo 2', sans-serif;
+  animation: marker-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes marker-in {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  70% { transform: scale(1.2) rotate(20deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Win animation */
+td.win-cell {
+  animation: win-pulse 1.5s infinite, glitch 0.2s infinite;
+}
+
+#message {
+  font-size: 24px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1rem;
+  color: var(--light-color);
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px auto;
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.9), rgba(30, 30, 40, 0.9));
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+  max-width: 400px;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  text-align: center;
+  text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+  animation: message-glow 4s infinite;
+}
+
+@keyframes message-glow {
+  0% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+  50% { box-shadow: 0 0 30px rgba(0, 242, 254, 0.4), 0 0 50px rgba(153, 69, 255, 0.2); }
+  100% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+}
+
+#message::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 4s infinite;
+}
+
+/* Victory message enhancements */
+#message.victory {
+  background: linear-gradient(135deg, rgba(0, 255, 157, 0.2), rgba(0, 242, 254, 0.2));
+  animation: victory-pulse 1.5s infinite;
+  border: 1px solid var(--accent-color);
+}
+
+@keyframes victory-pulse {
+  0% { box-shadow: 0 0 20px rgba(0, 255, 157, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(0, 255, 157, 0.6), 0 0 60px rgba(0, 242, 254, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(0, 255, 157, 0.3); }
+}
+
+.score-card {
+  background: linear-gradient(135deg, rgba(20, 20, 30, 0.8), rgba(30, 30, 40, 0.8));
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px auto;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+  max-width: 400px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+}
+
+.score-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(0, 242, 254, 0.1), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.score-card:hover::before {
+  opacity: 1;
+}
+
+.score-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4),
+              0 0 30px rgba(0, 242, 254, 0.3);
+}
+
+.score-header {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--light-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 10px;
+  position: relative;
+  font-family: 'Exo 2', sans-serif;
+}
+
+.score-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary-color), var(--tertiary-color));
+  animation: score-line 3s infinite;
+}
+
+@keyframes score-line {
+  0% { transform: scaleX(0.3); opacity: 0.5; }
+  50% { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(0.3); opacity: 0.5; }
+}
+
+.score-value {
+  font-size: 42px;
+  font-weight: bold;
+  margin-top: 10px;
+  font-family: 'Audiowide', cursive;
+  background: linear-gradient(to right, var(--primary-color), var(--tertiary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 0px 10px rgba(0, 242, 254, 0.3);
+  position: relative;
+  display: inline-block;
+}
+
+.score-value::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: skewX(-30deg);
+  animation: score-shine 4s infinite;
+  opacity: 0;
+}
+
+@keyframes score-shine {
+  0% { left: -100%; opacity: 0; }
+  10% { opacity: 0.5; }
+  20% { left: 100%; opacity: 0; }
+  100% { left: 100%; opacity: 0; }
+}
+
+.player-input {
+  max-width: 400px;
+  margin: 0 auto;
+  background: rgba(20, 20, 30, 0.6);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  animation: input-pulse 4s infinite;
+}
+
+@keyframes input-pulse {
+  0% { box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(0, 242, 254, 0.3); }
+  100% { box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+}
+
+.form-control, .input-group-text {
+  background-color: rgba(30, 30, 40, 0.8);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  color: var(--light-color);
+  font-family: 'Exo 2', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  background-color: rgba(30, 30, 40, 0.9);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5), inset 0 0 5px rgba(0, 242, 254, 0.2);
+  color: var(--light-color);
+  transform: scale(1.02);
+}
+
+.input-group-text {
+  color: var(--primary-color);
+  text-shadow: 0 0 5px rgba(0, 242, 254, 0.5);
+}
+
+.game-mode-btn {
+  margin: 5px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border: none;
+  text-transform: uppercase;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.game-mode-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+
+.game-mode-btn::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    var(--neon-blue), 
+    var(--neon-green), 
+    var(--neon-magenta), 
+    var(--neon-orange));
+  z-index: -2;
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-mode-btn:hover::before {
+  left: 100%;
+}
+
+.game-mode-btn:hover::after {
+  opacity: 1;
+  animation: border-animate 3s linear infinite;
+}
+
+@keyframes border-animate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+.game-mode-btn:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4),
+              0 0 30px rgba(0, 242, 254, 0.3);
+  letter-spacing: 2px;
+}
+
+.game-mode-btn:active {
+  transform: translateY(2px) scale(0.95);
+}
+
+.start-btn {
+  background: linear-gradient(45deg, #00ff9d, #00f2fe);
+  color: var(--dark-color);
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+}
+
+.devil-mode {
+  background: linear-gradient(45deg, #6a0dad, #9945FF);
+  color: white;
+  box-shadow: 0 0 20px rgba(153, 69, 255, 0.5);
+}
+
+.angel-mode {
+  background: linear-gradient(45deg, #f6d365, #fda085);
+  color: var(--dark-color);
+  box-shadow: 0 0 20px rgba(246, 211, 101, 0.5);
+}
+
+.theme-btn {
+  background: linear-gradient(45deg, #ff4d94, #ff9190);
+  color: white;
+  box-shadow: 0 0 20px rgba(255, 77, 148, 0.5);
+}
+
+.restart-btn {
+  background: linear-gradient(45deg, #ffaa00, #ff6b6b);
+  color: var(--dark-color);
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.5);
+}
+
+/* Button hover effect */
+.game-mode-btn:hover .btn-text {
+  animation: button-text-glitch 0.3s ease;
+}
+
+@keyframes button-text-glitch {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+
+/* Enhanced Confetti */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: var(--primary-color);
+  animation: fall 4s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+  z-index: 0;
+  opacity: 0.8;
+  box-shadow: 0 0 10px 2px rgba(0, 242, 254, 0.5);
+}
+
+.confetti.alt-1 {
+  background-color: var(--secondary-color);
+  box-shadow: 0 0 10px 2px rgba(255, 77, 148, 0.5);
+}
+
+.confetti.alt-2 {
+  background-color: var(--tertiary-color);
+  box-shadow: 0 0 10px 2px rgba(153, 69, 255, 0.5);
+}
+
+.confetti.alt-3 {
+  background-color: var(--accent-color);
+  box-shadow: 0 0 10px 2px rgba(0, 255, 157, 0.5);
+}
+
+@keyframes fall {
+  0% { transform: translateY(-100vh) rotate(0deg) scale(0); opacity: 0; }
+  10% { transform: translateY(-80vh) rotate(45deg) scale(1); opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(100vh) rotate(360deg) scale(0.5); opacity: 0; }
+}
+
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  animation: float 3s ease-in-out infinite;
+  background: rgba(20, 20, 30, 0.9);
+  border: 2px solid #ff00e6;
+  color: #ff00e6;
+  width: 60px;
+  height: 60px;
+  font-size: 1.4rem;
+  box-shadow: 0 0 20px rgba(255, 0, 230, 0.6);
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.floating-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(255, 0, 230, 0.8);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.about-container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, rgba(25, 10, 40, 0.9), rgba(40, 15, 60, 0.9));
+  border: 2px solid #ff00e6;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(255, 0, 230, 0.5);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" width="100" height="100"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="rgba(255,0,230,0.1)" stroke-width="0.5"/></svg>');
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.about-container h4 {
+  font-family: 'Audiowide', cursive;
+  color: #ff00e6;
+  text-shadow: 0 0 10px rgba(255, 0, 230, 0.7);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+
+.list-group-item {
+  background: rgba(30, 15, 45, 0.7);
+  border-color: rgba(255, 0, 230, 0.3);
+  color: #e0e0ff;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.list-group-item:before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: #ff00e6;
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.list-group-item:hover:before {
+  left: 0;
+  width: 100%;
+  background: rgba(255, 0, 230, 0.2);
+}
+
+.list-group-item:hover {
+  transform: translateX(5px);
+  color: #ffffff;
+}
+
+.card {
+  background: rgba(25, 10, 40, 0.9);
+  border: 2px solid #ff00e6;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(255, 0, 230, 0.3);
+}
+
+.card-header {
+  border-bottom: 2px solid rgba(255, 0, 230, 0.5);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.9rem;
+  background: rgba(40, 15, 60, 0.8);
+  color: #ff00e6;
+  text-shadow: 0 0 5px rgba(255, 0, 230, 0.5);
+  letter-spacing: 1px;
+  padding: 15px;
+}
+
+.bg-primary {
+  background: linear-gradient(45deg, #ff00e6, #00f0ff) !important;
+}
+
+.text-primary {
+  color: #ff00e6 !important;
+}
+
+.game-stat {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8px;
+  font-family: 'Exo 2', sans-serif;
+  letter-spacing: 1px;
+  position: relative;
+  padding-left: 15px;
+}
+
+.game-stat::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: #ff00e6;
+}
+
+#statsSection .card {
+  background: linear-gradient(135deg, rgba(25, 10, 40, 0.9), rgba(40, 15, 60, 0.9));
+  border: 2px solid #ff00e6;
+  position: relative;
+}
+
+#statsSection .card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, transparent 50%, #ff00e6 50%);
+}
+
+.stat-item {
+  padding: 20px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  background: rgba(30, 15, 45, 0.7);
+  border: 1px solid rgba(255, 0, 230, 0.2);
+  margin-bottom: 15px;
+}
+
+.stat-item:hover {
+  background: rgba(255, 0, 230, 0.15);
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 16px;
+  margin: 5px 0;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-family: 'Audiowide', cursive;
+  font-size: 32px;
+  background: linear-gradient(to right, #ff00e6, #00f0ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 5px rgba(255, 0, 230, 0.5);
+  margin-top: 5px;
+}
+
+/* Energy lines around the page */
+.energy-line {
+  position: fixed;
+  background: linear-gradient(90deg, transparent, #ff00e6, transparent);
+  height: 2px;
+  width: 100%;
+  opacity: 0.4;
+  z-index: -1;
+  animation: pulse-line 4s infinite;
+}
+
+.vertical-line {
+  position: fixed;
+  background: linear-gradient(180deg, transparent, #ff00e6, transparent);
+  width: 2px;
+  height: 100%;
+  opacity: 0.4;
+  z-index: -1;
+  animation: pulse-line 4s infinite reverse;
+}
+
+@keyframes pulse-line {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+  100% { opacity: 0.2; }
+}
+
+/* Glitch effect */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-5px, 5px); text-shadow: -2px 0 #00f0ff, 2px 0 #ff00e6; }
+  40% { transform: translate(-5px, -5px); text-shadow: 2px 0 #00f0ff, -2px 0 #ff00e6; }
+  60% { transform: translate(5px, 5px); text-shadow: 0 -2px #00f0ff, 0 2px #ff00e6; }
+  80% { transform: translate(5px, -5px); text-shadow: -2px 0 #00f0ff, 2px 0 #ff00e6; }
+  100% { transform: translate(0); text-shadow: none; }
+}
+
+.glitch-text {
+  position: relative;
+  animation: glitch 3s infinite;
+  animation-delay: calc(var(--delay) * 1s);
+}
+
+/* Win highlight animation */
+@keyframes win-pulse {
+  0% { background-color: rgba(255, 0, 230, 0.2); box-shadow: 0 0 10px #ff00e6; }
+  50% { background-color: rgba(255, 0, 230, 0.4); box-shadow: 0 0 30px #ff00e6, 0 0 60px #ff00e6; }
+  100% { background-color: rgba(255, 0, 230, 0.2); box-shadow: 0 0 10px #ff00e6; }
+}
+
+.win-highlight {
+  animation: win-pulse 2s infinite;
+}
+
+/* Glow effect for active player */
+.player-active {
+  position: relative;
+}
+
+.player-active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 10px;
+  box-shadow: 0 0 30px #ff00e6;
+  animation: active-pulse 1.5s infinite;
+  z-index: -1;
+}
+
+@keyframes active-pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.4; }
+}
+
+/* Game button styles */
+.game-button {
+  background: linear-gradient(135deg, rgba(40, 15, 60, 0.9), rgba(60, 20, 90, 0.9));
+  border: 2px solid #ff00e6;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin: 10px 5px;
+}
+
+.game-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 0, 230, 0.5);
+}
+
+.game-button:before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(rgba(255, 255, 255, 0.1), transparent);
+  transform: rotate(45deg);
+  z-index: 1;
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.game-button:hover:before {
+  opacity: 1;
+  transform: rotate(45deg) translate(0, 100%);
+}
+
+/* Loading animation */
+.loading-bar {
+  height: 5px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  margin: 20px 0;
+}
+
+.loading-bar:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 50%;
+  background: linear-gradient(to right, transparent, #ff00e6, #00f0ff);
+  animation: loading 2s infinite;
+}
+
+@keyframes loading {
+  0% { left: -50%; }
+  100% { left: 150%; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(25, 10, 40, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#ff00e6, #00f0ff);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(#00f0ff, #ff00e6);
+}
+
+hr.pixel-hr {
+  height: 10px;
+  border: none;
+  background-image: repeating-linear-gradient(to right,
+    #ff3366 0px, #ff3366 10px,
+    #8a2be2 10px, #8a2be2 20px,
+    #00bfff 20px, #00bfff 30px,
+    #8a2be2 30px, #8a2be2 40px
+  );
+  margin: 20px auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  animation: pixelPulse 2s infinite;
+}
+
+@keyframes pixelPulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+/* Optional hover effect */
+hr.pixel-hr:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+  </style>
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-cut me-2"></i>AutoBG Remover
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tool">Remove BG</a>
-                    </li>
-                </ul>
-            </div>
+  <!-- Energy lines for futuristic effect -->
+  <div class="energy-line" style="top: 20%;"></div>
+  <div class="energy-line" style="top: 60%;"></div>
+  <div class="vertical-line" style="left: 20%;"></div>
+  <div class="vertical-line" style="left: 80%;"></div>
+  
+  <div class="container py-4 game-container">
+    <div class="text-center mb-4">
+      <h1 class="game-title display-4 mb-0"><i class="fas fa-gamepad me-2"></i>QUADRIX</h1>
+      
+      <h2 class = "game-title" style = "font-size:30px;">--By K.Phani Kumar Sharma</h2>
+      <!-- Glowing gaming HR -->
+<hr class="pixel-hr">
+      <p class="game-subtitle">ULTRA EDITION</p>
+      <button id="aboutBtn" class="btn btn-sm game-mode-btn" style="background: rgba(20, 20, 30, 0.8); color: var(--primary-color); border: 1px solid rgba(0, 242, 254, 0.3);">
+        <i class="fas fa-info-circle me-1"></i> GAME INFO
+      </button>
+    </div>
+    
+    <div id="aboutSection" class="about-container p-4 mb-4" style="display:none;">
+      <h4 class="border-bottom pb-2"><i class="fas fa-book me-2"></i>HOW TO PLAY</h4>
+      <div class="row">
+        <div class="col-md-7">
+          <ol class="list-group list-group-flush">
+            <li class="list-group-item"><i class="fas fa-user-edit me-2 text-primary"></i>Enter player names in the designated fields</li>
+            <li class="list-group-item"><i class="fas fa-play me-2 text-success"></i>Click START to begin the game</li>
+            <li class="list-group-item"><i class="fas fa-chess-board me-2 text-info"></i>First player uses Y, second player uses O</li>
+            <li class="list-group-item"><i class="fas fa-palette me-2 text-warning"></i>Choose game modes for different visual experiences</li>
+            <li class="list-group-item"><i class="fas fa-trophy me-2" style="color: var(--secondary-color);"></i>Scores are tracked on the scoreboard</li>
+          </ol>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero-section" id="home">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 hero-text">
-                    <h1>Remove Image Backgrounds Instantly</h1>
-                    <p>Our AI-powered tool removes backgrounds from images in seconds. Get perfect cutouts every time with zero effort.</p>
-                    <a href="#tool" class="btn btn-primary me-3">
-                        <i class="fas fa-magic me-2"></i>Remove Background Now
-                    </a>
-                </div>
-                <div class="col-lg-6 mt-5 mt-lg-0 text-center">
-                    <img src="/api/placeholder/600/400" alt="Background Removal Example" class="img-fluid hero-image">
-                </div>
+        <div class="col-md-5">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <i class="fas fa-star me-2"></i>WINNING PATTERNS
             </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><i class="fas fa-minus me-2 text-primary"></i>Horizontal row (4 in a row)</li>
+              <li class="list-group-item"><i class="fas fa-grip-lines-vertical me-2 text-primary"></i>Vertical column (4 in a column)</li>
+              <li class="list-group-item"><i class="fas fa-slash me-2 text-primary"></i>Diagonal (4 in a diagonal)</li>
+              <li class="list-group-item"><i class="far fa-square me-2 text-primary"></i>Square in edges or center</li>
+            </ul>
+          </div>
         </div>
-    </section>
-
-    <!-- BG Removal Tool Section -->
-    <section class="py-5" id="tool">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-7 text-center">
-                    <h2>Remove Background in 3 Easy Steps</h2>
-                    <p class="lead">Upload an image, wait a moment, and download your transparent image</p>
-                </div>
-            </div>
-            
-            <div class="upload-area">
-                <div class="drop-zone" id="dropZone">
-                    <input type="file" id="fileInput" accept="image/*">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Drop your image here or click to upload</h3>
-                    <p>Supports JPG, PNG, WEBP (Max 5MB)</p>
-                    <button class="btn btn-primary">
-                        <i class="fas fa-upload me-2"></i>Choose File
-                    </button>
-                </div>
-                
-                <div class="preview-container" style="display: none;" id="previewContainer">
-                    <div class="preview-box">
-                        <h4>Original Image</h4>
-                        <div class="preview-img-container">
-                            <img id="originalImage" class="preview-img" src="" alt="Original Image">
-                        </div>
-                    </div>
-                    
-                    <div class="preview-box">
-                        <h4>Background Removed</h4>
-                        <div class="preview-img-container">
-                            <img id="resultImage" class="preview-img" src="" alt="Result Image">
-                            <div class="processing-overlay" id="processingOverlay">
-                                <div class="spinner"></div>
-                                <h4>Processing Image...</h4>
-                                <p>This should take just a few seconds</p>
-                            </div>
-                        </div>
-                        <button class="btn btn-success btn-download" id="downloadBtn" style="display: none;">
-                            <i class="fas fa-download me-2"></i>Download
-                        </button>
-                    </div>
-                </div>
-            </div>
+      </div>
+      <div class="text-end mt-3">
+        <p class="small text-muted">Created by k.Phani kumar | Ultra Edition</p>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div id="player1ScoreCard" class="score-card">
+          <div class="score-header">
+            <i class="fas fa-user-astronaut me-2"></i><span id="scoreLabel1">PLAYER 1</span>
+          </div>
+          <div class="score-value">
+            <i class="fas fa-trophy me-2" style="color: #FFD700;"></i><span id="sb">0</span>
+          </div>
+          <div class="game-stat" id="player1Stats">Games won: 0 | Win rate: 0%</div>
         </div>
-    </section>
-    
-    <!-- Features Section -->
-    <section class="features-section" id="features">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-lg-7 text-center">
-                    <h2>Why Choose Our Background Remover?</h2>
-                    <p class="lead">We offer the best AI-powered background removal technology with outstanding results</p>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="feature-card text-center">
-                        <i class="fas fa-bolt feature-icon"></i>
-                        <h4>Lightning Fast</h4>
-                        <p>Remove backgrounds in seconds, not minutes. Our AI technology processes images instantly.</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="feature-card text-center">
-                        <i class="fas fa-robot feature-icon"></i>
-                        <h4>AI-Powered</h4>
-                        <p>Our advanced AI precisely detects objects and removes backgrounds with incredible accuracy.</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="feature-card text-center">
-                        <i class="fas fa-lock feature-icon"></i>
-                        <h4>100% Private</h4>
-                        <p>Your images are processed securely in your browser. We never store or share your photos.</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="feature-card text-center">
-                        <i class="fas fa-magic feature-icon"></i>
-                        <h4>Perfect Results</h4>
-                        <p>Get clean edges around hair, fur, and complex objects that other tools miss.</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="feature-card text-center">
-                        <i class="fas fa-download feature-icon"></i>
-                        <h4>Free Downloads</h4>
-                        <p>Download transparent PNG images immediately after processing without watermarks.</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <div class="feature-card text-center">
-                        <i class="fas fa-code feature-icon"></i>
-                        <h4>No Installation</h4>
-                        <p>Use our tool directly in your browser without downloading software or plugins.</p>
-                    </div>
-                </div>
-            </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div id="player2ScoreCard" class="score-card">
+          <div class="score-header">
+            <i class="fas fa-user-ninja me-2"></i><span id="scoreLabel2">PLAYER 2</span>
+          </div>
+          <div class="score-value">
+            <i class="fas fa-trophy me-2" style="color: #FFD700;"></i><span id="sbd">0</span>
+          </div>
+          <div class="game-stat" id="player2Stats">Games won: 0 | Win rate: 0%</div>
         </div>
-    </section>
+      </div>
+    </div>
     
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 mb-4 mb-lg-0">
-                    <h4>AutoBG Remover</h4>
-                    <p>The fastest and most accurate AI background removal tool available online.</p>
-                    <div class="social-icons mt-3">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#tool">Remove BG</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
-                
-                <div class="col-lg-4 col-md-6">
-                    <h5>Contact Us</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="fas fa-envelope me-2"></i> support@autobgremover.com</li>
-                        <li><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
-                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Tech Street, San Francisco, CA</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <hr class="mt-4 mb-4" style="border-color: rgba(255, 255, 255, 0.1);">
-            
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <p class="mb-0">© 2025 AutoBG Remover. All rights reserved.</p>
-                </div>
-            </div>
+    <div id="setupSection" class="player-input my-4">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user-astronaut"></i></span>
+            <input type="text" id="p1" class="form-control" placeholder="Player 1 name">
+          </div>
         </div>
-    </footer>
+        <div class="col-md-6">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user-ninja"></i></span>
+            <input type="text" id="p2" class="form-control" placeholder="Player 2 name">
+          </div>
+        </div>
+      </div>
+    </div>
     
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div id="message" style="display:none;">It's Y's turn</div>
     
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <div class="text-center my-4">
+      <table id="board" style="display:none;">
+        <tr>
+          <td id="cell_0"></td>
+          <td id="cell_1"></td>
+          <td id="cell_2"></td>
+          <td id="cell_3"></td>
+        </tr>
+        <tr>
+          <td id="cell_4"></td>
+          <td id="cell_5"></td>
+          <td id="cell_6"></td>
+          <td id="cell_7"></td>
+        </tr>
+        <tr>
+          <td id="cell_8"></td>
+          <td id="cell_9"></td>
+          <td id="cell_10"></td>
+          <td id="cell_11"></td>
+        </tr>
+        <tr>
+          <td id="cell_12"></td>
+          <td id="cell_13"></td>
+          <td id="cell_14"></td>
+          <td id="cell_15"></td>
+        </tr>
+      </table>
+    </div>
     
-    <!-- ML Model Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ml5.js/0.12.2/ml5.min.js"></script>
+    <div class="d-flex justify-content-center flex-wrap">
+      <button id="startBtn" class="btn start-btn game-mode-btn">
+        <i class="fas fa-play me-2"></i>START
+      </button>
+      <button id="devilModeBtn" class="btn devil-mode game-mode-btn">
+        <i class="fas fa-moon me-2"></i>NEBULA MODE
+      </button>
+      <button id="angelModeBtn" class="btn angel-mode game-mode-btn">
+        <i class="fas fa-sun me-2"></i>SOLAR MODE
+      </button>
+      <button id="changeBgBtn" class="btn theme-btn game-mode-btn">
+        <i class="fas fa-palette me-2"></i>QUANTUM SHIFT
+      </button>
+      <button id="restartBtn" class="btn restart-btn game-mode-btn" style="display:none;">
+        <i class="fas fa-redo me-2"></i>RESTART
+      </button>
+    </div>
     
-    <!-- Custom JS -->
-    <script>
-        $(document).ready(function() {
-            // Smooth scrolling for anchor links
-            $('a[href^="#"]').on('click', function(e) {
-                e.preventDefault();
-                $('html, body').animate({
-                    scrollTop: $($(this).attr('href')).offset().top - 70
-                }, 500);
-            });
+    <div id="statsSection" class="mt-4 text-center" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <i class="fas fa-chart-line me-2"></i>GAME STATISTICS
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="stat-item">
+                <i class="fas fa-gamepad mb-2" style="color: var(--primary-color); font-size: 24px;"></i>
+                <div class="stat-label">TOTAL GAMES</div>
+                <div class="stat-value" id="totalGames">0</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-item">
+                <i class="fas fa-handshake mb-2" style="color: var(--secondary-color); font-size: 24px;"></i>
+                <div class="stat-label">TIES</div>
+                <div class="stat-value" id="totalTies">0</div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="stat-item">
+                <i class="fas fa-stopwatch mb-2" style="color: var(--tertiary-color); font-size: 24px;"></i>
+                <div class="stat-label">AVG MOVES</div>
+                <div class="stat-value" id="avgMoves">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <button id="soundToggleBtn" class="btn rounded-circle floating-button">
+    <i class="fas fa-volume-up"></i>
+  </button>
+  
+  <!-- Audio elements with better game sounds -->
+  <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/1031/1031-preview.mp3" preload="auto"></audio>
+  <audio id="winSound" src="https://assets.mixkit.co/active_storage/sfx/270/270-preview.mp3" preload="auto"></audio>
+  <audio id="tieSound" src="https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3" preload="auto"></audio>
+  <audio id="startSound" src="https://assets.mixkit.co/active_storage/sfx/2/2-preview.mp3" preload="auto"></audio>
+  <audio id="hoverSound" src="https://assets.mixkit.co/active_storage/sfx/1115/1115-preview.mp3" preload="auto"></audio>
+  
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      // Game variables
+      let Xscore = 0;
+      let Yscore = 0;
+      let totalGames = 0;
+      let totalTies = 0;
+      let totalMoves = 0;
+      let gameCount = 0;
+      let soundEnabled = true;
+      let turn = "Y";
+      let gameOver = false;
+      let moves = 0;
+      let gameStarted = false;
+      let p1Wins = 0;
+      let p2Wins = 0;
+      
+      // Define winning patterns
+      const winPatterns = [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7],
+        [8, 9, 10, 11],
+        [12, 13, 14, 15],
+        [0, 5, 10, 15],
+        [3, 6, 9, 12],
+        [0, 4, 8, 12],
+        [3, 7, 11, 15],
+        [1, 5, 9, 13],
+        [2, 6, 10, 14],
+        [0, 1, 4, 5],
+        [2, 3, 6, 7],
+        [8, 9, 12, 13],
+        [10, 11, 14, 15],
+        [5, 6, 9, 10]
+      ];
+      
+      // Toggle about section
+      $("#aboutBtn").click(function() {
+        $("#aboutSection").slideToggle(300);
+      });
+      
+      // Toggle sound
+      $("#soundToggleBtn").click(function() {
+        soundEnabled = !soundEnabled;
+        $(this).find('i').toggleClass('fa-volume-up fa-volume-mute');
+      });
+      
+      // Start button click handler
+      $("#startBtn").click(function() {
+        if (!gameStarted) {
+          startGame();
+          playSound('#startSound');
+        }
+      });
+      
+      // Cell click handler
+      function cellClicked() {
+        if (gameOver || $(this).text() !== "") {
+          return;
+        }
+        
+        playSound('#clickSound');
+        
+        $(this).text(turn).addClass(turn);
+        moves++;
+        totalMoves++;
+        
+        checkGameOver();
+        
+        if (!gameOver) {
+          switchTurn();
+        }
+      }
+      
+      // Start the game
+      function startGame() {
+        let p1 = $("#p1").val() || "Player 1";
+        let p2 = $("#p2").val() || "Player 2";
+        
+        $("#scoreLabel1").text(p1);
+        $("#scoreLabel2").text(p2);
+        
+        $("#setupSection").slideUp(300);
+        $("#board").fadeIn(500);
+        $("#message").fadeIn(500);
+        $("#restartBtn").show();
+        $("#statsSection").fadeIn(500);
+        
+        // Reset the board
+        resetBoard();
+        
+        gameStarted = true;
+        
+        // Add cell click handlers
+        $("td").off('click').on('click', cellClicked);
+      }
+      
+      // Check if game is over
+      function checkGameOver() {
+        for (let i = 0; i < winPatterns.length; i++) {
+          let cell1 = $("#cell_" + winPatterns[i][0]);
+          let cell2 = $("#cell_" + winPatterns[i][1]);
+          let cell3 = $("#cell_" + winPatterns[i][2]);
+          let cell4 = $("#cell_" + winPatterns[i][3]);
+          
+          if (cell1.text() !== "" && 
+              cell1.text() === cell2.text() && 
+              cell1.text() === cell3.text() && 
+              cell1.text() === cell4.text()) {
             
-            // Set up file upload via click
-            $('.drop-zone').on('click', function(e) {
-                if (!$(e.target).is('input')) {
-                    $('#fileInput').click();
-                }
-            });
+            gameOver = true;
+            totalGames++;
+            gameCount++;
             
-            // Handle file selection
-            $('#fileInput').on('change', function() {
-                if (this.files && this.files[0]) {
-                    handleFile(this.files[0]);
-                }
-            });
+            // Highlight winning cells
+            cell1.css("backgroundColor", "rgba(0, 191, 255, 0.5)");
+            cell2.css("backgroundColor", "rgba(0, 191, 255, 0.5)");
+            cell3.css("backgroundColor", "rgba(0, 191, 255, 0.5)");
+            cell4.css("backgroundColor", "rgba(0, 191, 255, 0.5)");
             
-            // Handle drag and drop
-            const dropZone = document.getElementById('dropZone');
-            
-            // Prevent default behavior to allow drop
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, preventDefaults, false);
-            });
-            
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
+            // Update scores
+            if (turn === "Y") {
+              Xscore++;
+              p1Wins++;
+              $("#sb").text(Xscore);
+            } else {
+              Yscore++;
+              p2Wins++;
+              $("#sbd").text(Yscore);
             }
             
-            // Add visual feedback when dragging over
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropZone.addEventListener(eventName, highlight, false);
-            });
+            // Create confetti effect
+            createConfetti();
             
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, unhighlight, false);
-            });
+            // Play win sound
+            playSound('#winSound');
             
-            function highlight() {
-                dropZone.classList.add('active');
-            }
+            // Update message
+            $("#message").html(`<i class="fas fa-trophy text-warning me-2"></i>${turn} wins!`);
             
-            function unhighlight() {
-                dropZone.classList.remove('active');
-            }
+            // Update stats
+            updateStats();
             
-            // Handle dropped files
-            dropZone.addEventListener('drop', handleDrop, false);
-            
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                
-                if (files && files[0]) {
-                    handleFile(files[0]);
-                }
-            }
-            
-            // Process the file
-            function handleFile(file) {
-                // Check file type
-                const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-                if (!validTypes.includes(file.type)) {
-                    alert('Please upload a valid image file (JPG, PNG, or WEBP)');
-                    return;
-                }
-                
-                // Check file size (5MB max)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('File is too large. Maximum size is 5MB.');
-                    return;
-                }
-                
-                // Show preview container
-                $('#previewContainer').show();
-                
-                // Show processing overlay
-                $('#processingOverlay').show();
-                
-                // Hide download button
-                $('#downloadBtn').hide();
-                
-                // Display original image
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('originalImage').src = e.target.result;
-                    
-                    // Process the image (simulate background removal)
-                    simulateBackgroundRemoval(e.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-            
-            // Simulate background removal (in a real app, you'd use a proper ML model or API)
-            function simulateBackgroundRemoval(imageUrl) {
-                // In a real application, this would be where you'd call your ML model or external API
-                // For this demo, we'll simulate processing with a timeout
-                
-                // Create a new image element to work with
-                const img = new Image();
-                img.crossOrigin = "anonymous";
-                
-                img.onload = function() {
-                    // In a real app, you'd process the image here
-                    // For demo purposes, we'll use a canvas to create a simulated transparent background
-                    setTimeout(function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        
-                        // Set canvas dimensions to match image
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        
-                        // Draw the image
-                        ctx.drawImage(img, 0, 0);
-                        
-                        // Simulate background removal using a simple algorithm
-                        // This is just a demo effect and not actual background removal
-                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        const data = imageData.data;
-                        
-                        // Create a simple effect (edge detection + center preserve)
-                        // In a real app, this would be replaced with actual ML-based segmentation
-                        const centerX = canvas.width / 2;
-                        const centerY = canvas.height / 2;
-                        const radius = Math.min(canvas.width, canvas.height) * 0.4;
-                        
-                        for (let i = 0; i < data.length; i += 4) {
-                            const x = (i / 4) % canvas.width;
-                            const y = Math.floor((i / 4) / canvas.width);
-                            
-                            // Calculate distance from center
-                            const dx = x - centerX;
-                            const dy = y - centerY;
-                            const distance = Math.sqrt(dx * dx + dy * dy);
-                            
-                            // Create a soft edge
-                            if (distance > radius) {
-                                const alpha = Math.max(0, 1 - (distance - radius) / (radius * 0.5));
-                                data[i + 3] = Math.floor(data[i + 3] * alpha); // Adjust alpha channel
-                            }
-                        }
-                        
-                        // Apply the modified data back to the canvas
-                        ctx.putImageData(imageData, 0, 0);
-                        
-                        // Update the result image
-                        document.getElementById('resultImage').src = canvas.toDataURL('image/png');
-                        
-                        // Hide processing overlay
-                        $('#processingOverlay').hide();
-                        
-                        // Show download button
-                        $('#downloadBtn').show();
-                    }, 2000); // Simulate processing time
-                };
-                
-                img.src = imageUrl;
-            }
-            
-            // Handle download button click
-            $('#downloadBtn').on('click', function() {
-                const resultImage = document.getElementById('resultImage').src;
-                
-                // Create a temporary link for download
-                const downloadLink = document.createElement('a');
-                downloadLink.href = resultImage;
-                downloadLink.download = 'bg-removed-image.png';
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-            });
+            return;
+          }
+        }
+        
+        // Check for tie
+        if (moves === 16) {
+          gameOver = true;
+          totalGames++;
+          totalTies++;
+          gameCount++;
+          
+          // Play tie sound
+          playSound('#tieSound');
+          
+          // Update message
+          $("#message").html(`<i class="fas fa-handshake me-2"></i>It's a tie!`);
+          
+          // Update stats
+          updateStats();
+        }
+      }
+      
+      // Switch turns
+      function switchTurn() {
+        turn = (turn === "Y") ? "O" : "Y";
+        $("#message").html(`<i class="fas fa-arrow-right me-2"></i>It's ${turn}'s turn`);
+      }
+      
+      // Reset the board
+      function resetBoard() {
+        $("td").text("").removeClass("Y O").css("backgroundColor", "");
+        turn = "Y";
+        gameOver = false;
+        moves = 0;
+        $("#message").html(`<i class="fas fa-arrow-right me-2"></i>It's Y's turn`);
+      }
+      
+      // Restart button handler
+      $("#restartBtn").click(function() {
+        resetBoard();
+        playSound('#startSound');
+      });
+      
+      // Devil's mode (dark theme)
+      $("#devilModeBtn").click(function() {
+        $("body").css({
+          "background-image": "linear-gradient(to right, #434343 0%, black 100%)",
+          "color": "white"
         });
-    </script>
+        
+        $(".score-card, #message, #board").css({
+          "background-color": "rgba(30, 30, 30, 0.8)",
+          "color": "white"
+        });
+        
+        $(".score-header, .game-stat").css("color", "white");
+        $("td").css("border-color", "rgba(255, 255, 255, 0.3)");
+      });
+      
+      // Angel's mode (light theme)
+      $("#angelModeBtn").click(function() {
+        $("body").css({
+          "background-image": "linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%)",
+          "color": "black"
+        });
+        
+        $(".score-card, #message, #board").css({
+          "background-color": "rgba(255, 255, 255, 0.8)",
+          "color": "black"
+        });
+        
+        $(".score-header, .game-stat").css("color", "black");
+        $("td").css("border-color", "rgba(0, 0, 0, 0.3)");
+      });
+      
+      // Change background randomly
+      $("#changeBgBtn").click(function() {
+        const gradients = [
+          "linear-gradient(to right, #ff758c 0%, #ff7eb3 100%)",
+          "linear-gradient(to right, #4facfe 0%, #00f2fe 100%)",
+          "linear-gradient(to right, #43e97b 0%, #38f9d7 100%)",
+          "linear-gradient(to right, #fa709a 0%, #fee140 100%)",
+          "linear-gradient(to right, #6a11cb 0%, #2575fc 100%)",
+          "linear-gradient(to right, #b721ff 0%, #21d4fd 100%)"
+        ];
+        
+        const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+        $("body").css("background-image", randomGradient);
+      });
+      
+      // Update statistics
+      function updateStats() {
+        const p1Name = $("#scoreLabel1").text();
+        const p2Name = $("#scoreLabel2").text();
+        
+        // Calculate win rates
+        const p1WinRate = gameCount > 0 ? Math.round((p1Wins / gameCount) * 100) : 0;
+        const p2WinRate = gameCount > 0 ? Math.round((p2Wins / gameCount) * 100) : 0;
+        
+        // Update player stats
+        $("#player1Stats").text(`Games won: ${p1Wins} | Win rate: ${p1WinRate}%`);
+        $("#player2Stats").text(`Games won: ${p2Wins} | Win rate: ${p2WinRate}%`);
+        
+        // Update global stats
+        $("#totalGames").text(totalGames);
+        $("#totalTies").text(totalTies);
+        $("#avgMoves").text(totalMoves > 0 ? Math.round(totalMoves / totalGames) : 0);
+      }
+      
+      // Create confetti effect
+      function createConfetti() {
+        for (let i = 0; i < 50; i++) {
+          const confetti = $("<div></div>")
+            .addClass("confetti")
+            .css({
+              left: Math.random() * 100 + "%",
+              top: -10,
+              backgroundColor: getRandomColor(),
+              animationDelay: Math.random() * 3 + "s"
+            });
+          
+          $("body").append(confetti);
+          
+          // Remove confetti after animation
+          setTimeout(function() {
+            confetti.remove();
+          }, 3000);
+        }
+      }
+      
+      // Get random color
+      function getRandomColor() {
+        const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"];
+        return colors[Math.floor(Math.random() * colors.length)];
+      }
+      
+      // Play sound
+      function playSound(selector) {
+        if (soundEnabled) {
+          $(selector)[0].volume = 0.5;
+          $(selector)[0].play();
+        }
+      }
+    });
+  </script>
 </body>
 </html>
